@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESE Kosmo - Painel Principal</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="assets/images/logo-inicial.jpg" type="image/x-icon">
 </head>
+
 <body>
     <header class="main-header">
         <nav id="main-nav-placeholder"></nav>
@@ -13,31 +17,45 @@
         <div class="header-titles">
             <h1>ESE Kosmo</h1>
             <p>A Gamificação aplicada na sua vida! </p>
-            <nav class="sub-nav">
-                <a href="pages/sobre.html" class="sub-nav-item">Sobre o ESE Kosmo</a>
-            </nav>
         </div>
     </header>
 
     <main class="container">
-        <section class="status-grid glass-effect">
-            <div class="stat-card">
-                <span class="label">Nível</span>
-                <span id="nivel" class="value">1</span>
+        <section class="status-principal glass-effect">
+
+            <div class="profile-summary">
+                <img id="user-avatar" src="assets/images/default-avatar.png" alt="Avatar do Usuário" class="avatar">
+                <div class="profile-info">
+                    <span id="user-name" class="user-name">Carregando...</span>
+                    <span class="user-level">Nível <span id="nivel">1</span></span>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="label">XP Total</span>
-                <span id="xp-total" class="value">0</span>
+
+            <div class="stats-area">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="label">XP Total</span>
+                        <span id="xp-total" class="value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="label">Pontos (PR)</span>
+                        <span id="pr-total" class="value">0</span>
+                    </div>
+                </div>
+
+                <div class="level-progress-container">
+                    <div class="progress-bar-level">
+                        <div id="progresso-nivel" class="progress" style="width: 0%;"></div>
+                    </div>
+                    <span id="progresso-nivel-texto" class="label">0 / 100 XP</span>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="label">Pontos (PR)</span>
-                <span id="pr-total" class="value">0</span>
-            </div>
+
         </section>
 
         <section class="atributos-lista">
             <h2>Atributos</h2>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Saúde Mental</span>
                 <div class="progress-bar">
@@ -45,7 +63,7 @@
                 </div>
                 <span id="saude-mental-value" class="value">0</span>
             </div>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Saúde Física</span>
                 <div class="progress-bar">
@@ -53,7 +71,7 @@
                 </div>
                 <span id="saude-fisica-value" class="value">0</span>
             </div>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Espírito</span>
                 <div class="progress-bar">
@@ -61,7 +79,7 @@
                 </div>
                 <span id="espirito-value" class="value">0</span>
             </div>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Dinheiro</span>
                 <div class="progress-bar">
@@ -69,7 +87,7 @@
                 </div>
                 <span id="dinheiro-value" class="value">0</span>
             </div>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Objetivos</span>
                 <div class="progress-bar">
@@ -77,7 +95,7 @@
                 </div>
                 <span id="objetivos-value" class="value">0</span>
             </div>
-            
+
             <div class="atributo-card glass-effect">
                 <span class="label">Conexões</span>
                 <div class="progress-bar">
@@ -85,7 +103,7 @@
                 </div>
                 <span id="conexoes-value" class="value">0</span>
             </div>
-            
+
         </section>
     </main>
 
@@ -93,4 +111,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

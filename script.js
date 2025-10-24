@@ -1,3 +1,14 @@
+// --- No topo do script.js ---
+// COLOQUE AS MESMAS CHAVES DO login.js
+const SUPABASE_URL = 'https://kdjpboltryumsteldayy.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkanBib2x0cnl1bXN0ZWxkYXl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzMzQ5MDIsImV4cCI6MjA3NjkxMDkwMn0.pVOVUAfyxywkLPiDe9OTJVg3VJBwL1LA0fotPVmj8sU';
+
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUser = null; // Vamos guardar o usuário logado aqui
+let userProfile = null; // Guardará dados da tabela 'profiles'
+
 // Aguarda o DOM carregar
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -48,7 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     .replace(/href="banco\.html"/g, 'href="pages/banco.html"')
                     .replace(/href="conquistas\.html"/g, 'href="pages/conquistas.html"')
                     .replace(/href="loja\.html"/g, 'href="pages/loja.html"')
-                    .replace(/href="historico\.html"/g, 'href="pages/historico.html"');
+                    .replace(/href="historico\.html"/g, 'href="pages/historico.html"')
+                    .replace(/href="sobre\.html"/g, 'href="pages/sobre.html"')
+                    // Links Informativos
+                    .replace(/href="politica-privacidade\.html"/g, 'href="pages/politica-privacidade.html"')
+                    .replace(/href="termo-privacidade\.html"/g, 'href="pages/termo-privacidade.html"');
             } else {
                 // Estamos em /pages/, os links estão corretos
                 finalNavHtml = navHtml;
@@ -112,21 +127,117 @@ document.addEventListener("DOMContentLoaded", () => {
         bancoMissoes: []
     };
 
-    // 2. FUNÇÕES DE PERSISTÊNCIA (localStorage)
-    function salvarGame() {
-        localStorage.setItem("eseKosmoState", JSON.stringify(gameState));
+    /**
+ * Busca os dados do perfil (display_name) do usuário logado na tabela 'profiles'.
+ */
+    async function fetchProfileData() {
+        if (!currentUser) return; // Precisa estar logado
+
+        console.log("Buscando dados do perfil...");
+        const { data, error } = await _supabase
+            .from('profiles')
+            .select('display_name') // Queremos o nome
+            .eq('id', currentUser.id) // Onde o ID do perfil é igual ao ID do usuário logado
+            .single(); // Espera apenas um resultado
+
+        if (error) {
+            console.error("Erro ao buscar perfil:", error.message);
+            userProfile = { display_name: "Usuário" }; // Nome padrão em caso de erro
+        } else if (data) {
+            console.log("Perfil encontrado:", data);
+            userProfile = data;
+        } else {
+            console.log("Nenhum perfil encontrado para o usuário, usando padrão.");
+            userProfile = { display_name: "Novo Usuário" }; // Nome padrão se não houver perfil
+        }
     }
 
-    function carregarGame() {
-        const dadosSalvos = localStorage.getItem("eseKosmoState");
+    async function runAppLogic() {
+        console.log("runAppLogic iniciada para:", currentUser?.email);
 
-        if (dadosSalvos) {
-            gameState = JSON.parse(dadosSalvos);
-        } else {
+        // Carrega os dados do jogo
+        await carregarGame();
+
+        // >>> NOVO: Busca os dados do perfil <<<
+        await fetchProfileData();
+
+        // Carrega os componentes (nav e footer)
+        await carregarComponentes();
+
+        // ... (resto da função: setupMenuToggles, atualizarNavAtiva, lógica da página) ...
+        setupMenuToggles();
+        atualizarNavAtiva();
+        // ... Lógica if/else das páginas (Não muda) ...
+        const path = window.location.pathname;
+        if (path.endsWith("/") || path.endsWith("/index.html") || path === "/") {
+            atualizarPainelPrincipal();
+            // ... resto do if/else ...
+        }
+        // ...
+    }
+
+    // 2. FUNÇÕES DE PERSISTÊNCIA (localstorage)
+
+    /**
+     * Salva o estado do jogo NO BACKEND (Supabase)
+     */
+    async function salvarGame() {
+        if (!currentUser) return; // Não salva se não houver usuário
+
+        console.log("Salvando progresso na nuvem...");
+
+        const { error } = await _supabase
+            .from('user_game_state') // Nome da tabela que criamos
+            .update({
+                game_state: gameState, // A coluna do tipo JSONB
+                updated_at: new Date()
+            })
+            .eq('user_id', currentUser.id); // Onde o ID do usuário for o nosso
+
+        if (error) {
+            // Se deu erro (ex: usuário ainda não tem uma linha), tenta INSERIR
+            if (error.code === '23502' || error.code === 'PGRST116') { // Erro de "não encontrado"
+                const { insertError } = await _supabase
+                    .from('user_game_state')
+                    .insert({
+                        user_id: currentUser.id,
+                        game_state: gameState
+                    });
+                if (insertError) console.error("Erro ao INSERIR game state:", insertError);
+            } else {
+                console.error("Erro ao ATUALIZAR game state:", error);
+            }
+        }
+    }
+
+    /**
+     * Carrega o estado do jogo DO BACKEND (Supabase)
+     */
+    async function carregarGame() {
+        if (!currentUser) return; // Não carrega se não houver usuário
+
+        console.log("Carregando progresso da nuvem...");
+
+        const { data, error } = await _supabase
+            .from('user_game_state')
+            .select('game_state') // Queremos apenas a coluna com o JSON
+            .eq('user_id', currentUser.id)
+            .single(); // Pega apenas um resultado
+
+        if (error || !data || !data.game_state) {
+            // Se der erro ou o usuário for novo (sem dados)
+            console.log("Nenhum progresso na nuvem. Usando estado padrão.");
             gameState = { ...defaultState };
+
+            // Salva o estado padrão na nuvem pela primeira vez
+            await salvarGame();
+        } else {
+            // Encontrou dados!
+            console.log("Progresso encontrado!");
+            gameState = data.game_state;
         }
 
-        // Garante que o estado tenha sempre as chaves mais recentes
+        // Garante que o estado local tenha sempre as chaves mais recentes
         for (let key in defaultState) {
             if (!gameState.hasOwnProperty(key)) {
                 gameState[key] = defaultState[key];
@@ -137,13 +248,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. FUNÇÕES DE ATUALIZAÇÃO DA UI (PAINEL PRINCIPAL)
     // (Função da Etapa anterior, sem modificações)
     function atualizarPainelPrincipal() {
-        const elNivel = document.getElementById("nivel");
+        // Seleciona os novos elementos
+        const elUserAvatar = document.getElementById("user-avatar");
+        const elUserName = document.getElementById("user-name");
+
+        // Seleciona os elementos antigos
+        const elNivel = document.getElementById("nivel"); // Agora dentro de .user-level
         const elXpTotal = document.getElementById("xp-total");
         const elPrTotal = document.getElementById("pr-total");
+        const elProgressoNivel = document.getElementById("progresso-nivel");
+        const elProgressoNivelTexto = document.getElementById("progresso-nivel-texto");
 
+        // --- Atualização do Perfil ---
+        if (userProfile && elUserName) {
+            elUserName.textContent = userProfile.display_name || "Usuário";
+        }
+        // Avatar: Por enquanto usamos o default. Poderíamos buscar 'avatar_url' do Supabase Auth se usássemos OAuth.
+        // if (userProfile && userProfile.avatar_url && elUserAvatar) {
+        //     elUserAvatar.src = userProfile.avatar_url;
+        // } else if (elUserAvatar) {
+        //     elUserAvatar.src = "assets/images/default-avatar.png"; // Garante o default
+        // }
+
+
+        // --- Atualização de Nível/Stats (sem mudanças na lógica, só IDs) ---
         if (elNivel) elNivel.textContent = gameState.nivel;
         if (elXpTotal) elXpTotal.textContent = gameState.xpTotal;
         if (elPrTotal) elPrTotal.textContent = gameState.prTotal;
+
+        if (elProgressoNivelTexto) {
+            elProgressoNivelTexto.textContent = `${gameState.xpAtual.toFixed(0)} / ${gameState.xpParaProximoNivel} XP`;
+        }
+        if (elProgressoNivel) {
+            const porcentagem = gameState.xpParaProximoNivel > 0 ? (gameState.xpAtual / gameState.xpParaProximoNivel) * 100 : 0;
+            elProgressoNivel.style.width = Math.min(porcentagem, 100) + "%"; // Garante max 100%
+        }
 
         const atributos = gameState.atributos;
 
@@ -586,7 +725,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 5. INICIALIZAÇÃO PRINCIPAL (Agora Assíncrona)
     async function inicializarApp() {
-        carregarGame();
+        // --- INÍCIO: GUARDA DE SEGURANÇA ---
+        const { data: { session }, error } = await _supabase.auth.getSession();
+
+        if (error) {
+            console.error("Erro ao pegar sessão:", error);
+            // Não conseguimos verificar, manda para o login
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (!session) {
+            // NÃO HÁ SESSÃO. Usuário não está logado.
+            console.log("Nenhum usuário logado. Redirecionando...");
+            window.location.href = 'login.html';
+            return; // Para a execução do script
+        }
+
+        // Se chegamos aqui, o usuário ESTÁ LOGADO
+        currentUser = session.user;
+        console.log("Usuário logado:", currentUser.email);
+        // --- FIM: GUARDA DE SEGURANÇA ---
+
+        // Agora o resto do seu código roda, sabendo que o usuário existe
+
+        // Primeiro, carrega os dados do jogo (AGORA DO BACKEND)
+        await carregarGame(); // <- Modificada para AWAIT
+
+        // Depois, carrega os componentes (nav e footer)
         await carregarComponentes();
 
         // Configura os toggles DOPOIS de carregar os componentes

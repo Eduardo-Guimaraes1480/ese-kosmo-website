@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE Kosmo - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="assets/images/logo-inicial.jpg" type="image/x-icon">
+</head>
+<body>
+    <header class="main-header">
+        <h1>ESE Kosmo</h1>
+        <p>A Gamificação aplicada na sua vida!</p>
+    </header>
+
+    <main class="container">
+        <section class="login-card glass-effect">
+            <h2>Login</h2>
+            <form id="login-form" class="form-adicionar-missao">
+                <div class="form-grupo">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn-principal">Entrar</button>
+                <p id="auth-error" class="auth-error"></p>
+            </form>
+            <p class="auth-switch">Não tem uma conta? <a href="register.html">Registre-se</a></p>
+        </section>
+    </main>
+    <script src="auth.js"></script>
+</body>
+</html>
