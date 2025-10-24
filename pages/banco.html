@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESE Kosmo - Banco de Missões</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav id="main-nav-placeholder"></nav>
+
+        <div class="header-titles">
+            <h1>Banco de Modelos</h1>
+            <p>Crie modelos de missões para ativar rapidamente no seu Diário.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="form-secao glass-effect">
+            <h2>Novo Modelo de Missão</h2>
+            <form id="form-adicionar-modelo" class="form-adicionar-missao">
+                <div class="form-grupo">
+                    <label for="modelo-nome">Nome do Modelo:</label>
+                    <input type="text" id="modelo-nome" required>
+                </div>
+                
+                <div class="form-grupo-grid">
+                    <div class="form-grupo">
+                        <label for="modelo-xp">XP Base:</label>
+                        <input type="number" id="modelo-xp" value="10" min="0" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="modelo-pr">PR Base:</label>
+                        <input type="number" id="modelo-pr" value="5" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modelo-atributo">Atributo:</label>
+                    <select id="modelo-atributo" required>
+                        <option value="Saude Mental">Saúde Mental</option>
+                        <option value="Saude Fisica">Saúde Física</option>
+                        <option value="Espirito">Espírito</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Objetivos">Objetivos</option>
+                        <option value="Conexoes">Conexões</option>
+                    </select>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="modelo-pilar">Pilar Universal (Bônus):</label>
+                    <select id="modelo-pilar">
+                        <option value="nenhum">Nenhum (1.0x)</option>
+                        <option value="construcao">Pilar da Construção (1.5x)</option>
+                        <option value="logica">Pilar da Lógica (1.2x)</option>
+                        <option value="criatividade">Pilar da Criatividade (1.2x)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-principal">Salvar Modelo</button>
+            </form>
+        </section>
+
+        <section class="lista-secao">
+            <h2>Modelos Salvos</h2>
+            <div id="lista-modelos-banco">
+                </div>
+        </section>
+    </main>
+
+    <footer id="main-footer-placeholder"></footer>
+
+    <script src="../script.js"></script>
+</body>
+</html>

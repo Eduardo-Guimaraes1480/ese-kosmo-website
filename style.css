@@ -122,86 +122,582 @@ h1, h2 {
     transition: width 0.3s ease-in-out;
 }
 
-/* --- Navegação Principal (Fixa no Rodapé) --- */
-.main-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    
-    /* Aplicando o Glassmorphism no Menu */
-    background: rgba(15, 15, 30, 0.7);
-    border-top: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+/* --- Estilos para pages/diario.html --- */
+
+.form-secao {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
 }
-.nav-item {
+
+.form-adicionar-missao {
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.form-grupo label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+.form-grupo input[type="text"],
+.form-grupo input[type="number"],
+.form-grupo select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--glass-border);
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+.form-grupo select option {
+    background-color: var(--bg-color);
+}
+
+.form-grupo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.form-grupo-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.form-grupo-checkbox input {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.btn-principal {
+    padding: 0.85rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    background-color: var(--primary-glow);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.btn-principal:hover {
+    transform: scale(1.02);
+}
+
+
+/* --- Estilos da Lista de Missões --- */
+.lista-secao h2 {
+    margin-bottom: 1rem;
+}
+
+.missao-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* Checkbox | Texto | Recompensas */
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.missao-item input[type="checkbox"] {
+    width: 1.75rem;
+    height: 1.75rem;
+    cursor: pointer;
+}
+.missao-item.completa .missao-info h3 {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.missao-info h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+.missao-info p {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
+.missao-recompensas {
+    text-align: right;
+}
+.missao-recompensas span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.missao-recompensas .xp {
+    color: #89ff89; /* Verde XP */
+}
+.missao-recompensas .pr {
+    color: #ffc475; /* Laranja PR */
+}
+
+/* --- Estilos para pages/loja.html --- */
+#pr-saldo {
+    font-weight: 700;
+    color: #ffc475; /* Laranja PR */
+}
+
+.loja-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.loja-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 1rem;
+}
+.loja-item h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.loja-item .custo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffc475; /* Laranja PR */
+}
+.loja-item .btn-comprar {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--bg-color);
+    background-color: #ffc475;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.loja-item .btn-comprar:disabled {
+    background-color: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* --- Estilos para pages/conquistas.html --- */
+.conquistas-secao {
+    margin-bottom: 2rem;
+}
+.conquistas-secao h2 {
+    text-align: left;
+    margin-left: 0.5rem;
+    border-bottom: 2px solid var(--primary-glow);
+    padding-bottom: 0.5rem;
+}
+
+.conquista-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.6; /* Começa "bloqueada" */
+}
+.conquista-item.desbloqueada {
+    opacity: 1;
+    border-left: 4px solid #89ff89; /* Verde XP */
+}
+.conquista-item h3 {
+    margin: 0 0 0.25rem 0;
+}
+.conquista-item p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+.conquista-item .recompensa {
+    font-weight: 600;
+    color: #89ff89;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.placeholder-social {
+    padding: 1rem;
+    text-align: center;
+    border: 2px dashed var(--glass-border);
+}
+.placeholder-social h3 {
+    color: var(--primary-glow);
+}
+
+/* --- Estilos para pages/historico.html --- */
+.historico-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.historico-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* Data | Info | Recompensas */
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+}
+.historico-item .data {
+    font-size: 0.8rem;
+    font-weight: 600;
+    writing-mode: vertical-rl; /* Bônus: Data na vertical */
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    opacity: 0.7;
+    border-right: 1px solid var(--glass-border);
+    padding-right: 0.75rem;
+}
+.historico-item .info h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+.historico-item .info p {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0;
+}
+.historico-item .recompensas {
+    text-align: right;
+}
+.historico-item .recompensas span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.historico-item .recompensas .xp {
+    color: #89ff89; /* Verde XP */
+}
+.historico-item .recompensas .pr {
+    color: #ffc475; /* Laranja PR */
+}
+
+/* --- Estilos para pages/banco.html --- */
+.banco-item {
+    display: grid;
+    grid-template-columns: 1fr auto; /* Info | Botão */
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+.banco-item .info h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+.banco-item .info p {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0;
+}
+.banco-item .info .recompensas {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.banco-item .info .recompensas .xp {
+    color: #89ff89;
+    margin-right: 0.5rem;
+}
+.banco-item .info .recompensas .pr {
+    color: #ffc475;
+}
+
+.banco-item .btn-ativar {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    background-color: var(--primary-glow);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* --- Novo Menu Superior e Rodapé --- */
+/* Reseta o padding que o menu antigo precisava */
+body {
+    padding-bottom: 0; 
+}
+
+/* Novo Rodapé */
+.main-footer {
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+.main-footer .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.main-footer .footer-links .nav-item {
+    font-size: 0.8rem;
+}
+.main-footer p {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-top: 1rem;
+}
+
+/* --- Ajuste no @media (Desktop) --- */
+@media (min-width: 768px) {
+    /* O container do grid já tem o menu lateral, 
+       então vamos mover o .top-nav para o layout principal 
+       e o footer para o final */
+    
+    .container {
+        /* O container principal agora tem 3 colunas */
+        display: grid;
+        grid-template-columns: 300px 1fr; /* Menu lateral | Conteúdo */
+        grid-template-rows: auto 1fr auto; /* Header | Main | Footer */
+        gap: 2rem;
+        padding-top: 2rem;
+    }
+    
+    /* Move o main-content para a área correta */
+    /* Precisamos de um wrapper no HTML... 
+       ... ou podemos aplicar isso a todas as seções */
+    .container > main {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
+
+    /* Coloca o footer na posição correta */
+    .main-footer {
+        grid-column: 1 / 3; /* Ocupa as duas colunas */
+        grid-row: 3 / 4;
+        margin-top: 0;
+    }
+    
+    .main-footer .footer-links {
+        /* Links horizontais no desktop */
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+/* --- INÍCIO: Bloco de CSS do Menu (Passo 10 Revisado) --- */
+
+/* Ajuste no Header para o Menu Hamburguer */
+.main-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem; /* Padding menor no mobile */
+    text-align: left; /* Alinha à esquerda, já que o menu está lá */
+}
+.main-header .header-titles {
+    flex-grow: 1;
+}
+.main-header h1 {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 1.5rem; /* Um pouco menor no mobile */
+}
+.main-header p {
+    text-align: left;
+    margin: 0;
+}
+
+/* --- Estilos do Menu Mobile (Novo) --- */
+.menu-toggle {
+    background: none;
+    border: 1px solid var(--glass-border);
+    color: var(--text-color);
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menu-toggle svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--text-color);
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    
+    /* Escondido por padrão */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+}
+.mobile-menu-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    background: var(--bg-color);
+    border-right: 1px solid var(--glass-border);
+    
+    /* Efeito de "slide" */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Estado Aberto (controlado por JS) --- */
+body.menu-open .mobile-menu-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+body.menu-open .mobile-menu-panel {
+    transform: translateX(0);
+}
+/* --- Fim do Estado Aberto --- */
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+.mobile-menu-header span {
+    font-weight: 600;
+}
+.menu-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 300;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Links (genérico, serve para mobile e desktop) */
+.nav-item {
+    display: flex;
     align-items: center;
     text-decoration: none;
     color: var(--text-color);
-    font-size: 0.75rem;
     opacity: 0.7;
     transition: opacity 0.2s;
+    font-size: 1.1rem;
+    padding: 1rem;
+    width: 100%;
+    gap: 0.5rem;
 }
 .nav-item.active,
 .nav-item:hover {
     opacity: 1;
     font-weight: 600;
     color: var(--primary-glow);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+/* Estilo específico para links no painel mobile */
+.mobile-menu-panel .nav-item {
+    border-bottom: 1px solid var(--glass-border);
 }
 
-/* --- Responsividade (Desktop) --- */
+/* --- Lógica de Show/Hide (Mobile vs Desktop) --- */
+
+/* Por padrão (Mobile): */
+/* 1. Esconde o menu desktop */
+.desktop-nav-container {
+    display: none;
+}
+/* 2. Mostra o menu hamburguer */
+.mobile-nav-container {
+    display: block;
+}
+
+/* --- Media Query para Desktop (768px+) --- */
 @media (min-width: 768px) {
-    body {
-        padding-bottom: 0; /* Remove padding do menu mobile */
+    
+    /* 1. Esconde o hamburguer no desktop */
+    .mobile-nav-container {
+        display: none;
     }
     
-    .container {
-        display: grid;
-        grid-template-columns: 300px 1fr; /* Menu lateral | Conteúdo */
-        gap: 2rem;
-        padding-top: 2rem;
-    }
-
-    /* Transforma a navegação em menu lateral */
-    .main-nav {
-        position: static; /* Deixa de ser fixo */
-        flex-direction: column;
-        height: auto;
-        width: auto;
-        align-items: flex-start;
-        justify-content: flex-start;
+    /* 2. Mostra o menu desktop */
+    .desktop-nav-container {
+        display: flex; /* Torna-se visível */
+        flex-direction: row; /* IMPORTANTE: Alinha "lado a lado" */
+        justify-content: center; /* Centraliza os links na barra */
+        align-items: center;
+        gap: 0.5rem; /* Espaço entre os links */
         
-        /* Ajusta o Glassmorphism para o menu lateral */
-        padding: 1rem;
+        /* Remove o estilo de sidebar antigo */
+        width: 100%;
+        padding: 0.75rem;
+        margin: 0; 
+        
+        /* Remove o fundo de "vidro", pois o header já terá */
+        background: none;
+        border: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
+    }
+    
+    /* 3. Ajusta o header no desktop */
+    .main-header {
+        /* O header vira um flex-column para abrigar o título E o menu */
+        display: flex;
+        flex-direction: column; /* Título em cima, menu embaixo */
+        align-items: center;
+        text-align: center;
+        padding: 1.5rem 1rem;
+        
+        /* O header principal (com o título) vira o "glass-effect" */
+        margin: 1rem;
         border-radius: 12px;
-        border: 1px solid var(--glass-border);
         background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
-    
-    .nav-item {
-        font-size: 1.1rem;
-        padding: 0.75rem 0.5rem;
-        width: 100%;
+    .main-header .header-titles {
+        margin-bottom: 1rem; /* Espaço entre o título e o menu */
     }
-    
-    /* Ajusta o layout do conteúdo principal */
-    .main-header {
-        grid-column: 2 / 3;
-        padding-top: 0;
+    .main-header h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        font-size: 2rem;
     }
-    .status-grid {
-        grid-column: 2 / 3;
+    .main-header p {
+        text-align: center;
+        margin: 0;
     }
-    .atributos-lista {
-        grid-column: 2 / 3;
+
+    /* 4. Ajusta os links do menu desktop */
+    .desktop-nav-container .nav-item {
+        width: auto; /* IMPORTANTE: para ficarem "lado a lado" */
+        padding: 0.75rem 1rem; /* Padding horizontal */
+        border-radius: 6px;
+        border-bottom: none; /* Remove a borda do menu mobile */
+    }
+
+    /* 5. Ajusta o layout do footer no desktop (como você gostou) */
+    .main-footer .footer-links {
+        grid-template-columns: repeat(6, 1fr); /* 6 colunas */
     }
 }
+
+/* --- FIM: Bloco de CSS do Menu --- */
