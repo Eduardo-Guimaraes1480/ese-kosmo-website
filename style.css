@@ -1,0 +1,207 @@
+/* --- Configurações Globais (Mobile-First) --- */
+:root {
+    --bg-color: #0a0a1a; /* Azul cósmico bem escuro */
+    --text-color: #f0f0f0;
+    --primary-glow: #6a85ff; /* Um brilho azul/roxo */
+    --glass-bg: rgba(25, 25, 50, 0.4); /* Fundo do "vidro" */
+    --glass-border: rgba(255, 255, 255, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    background-image: radial-gradient(circle at 10% 10%, var(--primary-glow) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 90%, #3a4a9a 0%, transparent 40%);
+    background-attachment: fixed;
+    padding-bottom: 80px; /* Espaço para o menu de navegação fixo */
+}
+
+.container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.main-header {
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+.main-header p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+/* --- Efeito Glassmorphism --- */
+.glass-effect {
+    background: var(--glass-bg);
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Grid de Status (Nível, XP, PR) --- */
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+.stat-card .label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+.stat-card .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-glow);
+}
+
+/* --- Lista de Atributos --- */
+.atributos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.atributo-card {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr auto; /* Nome | Valor */
+    grid-template-rows: auto auto;    /* Progress Bar na segunda linha */
+    gap: 0.25rem 0.5rem;
+    align-items: center;
+}
+.atributo-card .label {
+    font-size: 1rem;
+    font-weight: 500;
+    grid-column: 1 / 2;
+}
+.atributo-card .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: end;
+}
+.progress-bar {
+    grid-column: 1 / 3;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+.progress-bar .progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-glow), #aabaff);
+    border-radius: 4px;
+    transition: width 0.3s ease-in-out;
+}
+
+/* --- Navegação Principal (Fixa no Rodapé) --- */
+.main-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+    /* Aplicando o Glassmorphism no Menu */
+    background: rgba(15, 15, 30, 0.7);
+    border-top: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.nav-item.active,
+.nav-item:hover {
+    opacity: 1;
+    font-weight: 600;
+    color: var(--primary-glow);
+}
+
+/* --- Responsividade (Desktop) --- */
+@media (min-width: 768px) {
+    body {
+        padding-bottom: 0; /* Remove padding do menu mobile */
+    }
+    
+    .container {
+        display: grid;
+        grid-template-columns: 300px 1fr; /* Menu lateral | Conteúdo */
+        gap: 2rem;
+        padding-top: 2rem;
+    }
+
+    /* Transforma a navegação em menu lateral */
+    .main-nav {
+        position: static; /* Deixa de ser fixo */
+        flex-direction: column;
+        height: auto;
+        width: auto;
+        align-items: flex-start;
+        justify-content: flex-start;
+        
+        /* Ajusta o Glassmorphism para o menu lateral */
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    
+    .nav-item {
+        font-size: 1.1rem;
+        padding: 0.75rem 0.5rem;
+        width: 100%;
+    }
+    
+    /* Ajusta o layout do conteúdo principal */
+    .main-header {
+        grid-column: 2 / 3;
+        padding-top: 0;
+    }
+    .status-grid {
+        grid-column: 2 / 3;
+    }
+    .atributos-lista {
+        grid-column: 2 / 3;
+    }
+}
